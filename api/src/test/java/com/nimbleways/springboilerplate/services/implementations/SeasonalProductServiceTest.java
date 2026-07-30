@@ -1,6 +1,7 @@
 package com.nimbleways.springboilerplate.services.implementations;
 
 import com.nimbleways.springboilerplate.entities.Product;
+import com.nimbleways.springboilerplate.entities.ProductType;
 import com.nimbleways.springboilerplate.repositories.ProductRepository;
 import com.nimbleways.springboilerplate.utils.Annotations.UnitTest;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class SeasonalProductServiceTest {
     @Test
     void givenInSeasonOutOfStockLeadTimeWithinSeason() {
         // GIVEN — in season, out of stock, leadTime (5 days) fits before end of season (30 days)
-        Product product = new Product(null, 5, 0, "SEASONAL", "Watermelon", null,
+        Product product = new Product(null, 5, 0, ProductType.SEASONAL, "Watermelon", null,
                 LocalDate.now().minusDays(1), LocalDate.now().plusDays(30));
         when(productRepository.save(product)).thenReturn(product);
 
@@ -43,7 +44,7 @@ class SeasonalProductServiceTest {
     @Test
     void givenOutOfStockLeadTimeExceedsSeason() {
         // GIVEN — leadTime (60 days) goes past season end (30 days away)
-        Product product = new Product(null, 60, 0, "SEASONAL", "Watermelon", null,
+        Product product = new Product(null, 60, 0, ProductType.SEASONAL, "Watermelon", null,
                 LocalDate.now().minusDays(1), LocalDate.now().plusDays(30));
         when(productRepository.save(product)).thenReturn(product);
 
@@ -59,7 +60,7 @@ class SeasonalProductServiceTest {
     @Test
     void givenBeforeSeasonLeadTimeWithinSeason() {
         // GIVEN — season hasn't started yet, leadTime (15) fits before end (100 days)
-        Product product = new Product(null, 15, 30, "SEASONAL", "Grapes", null,
+        Product product = new Product(null, 15, 30, ProductType.SEASONAL, "Grapes", null,
                 LocalDate.now().plusDays(10), LocalDate.now().plusDays(100));
         when(productRepository.save(product)).thenReturn(product);
 

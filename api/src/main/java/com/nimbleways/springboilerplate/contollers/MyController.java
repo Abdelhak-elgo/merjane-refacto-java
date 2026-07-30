@@ -3,13 +3,12 @@ package com.nimbleways.springboilerplate.contollers;
 import com.nimbleways.springboilerplate.dto.product.ProcessOrderResponse;
 import com.nimbleways.springboilerplate.entities.Order;
 import com.nimbleways.springboilerplate.entities.Product;
+import com.nimbleways.springboilerplate.entities.ProductType;
 import com.nimbleways.springboilerplate.repositories.OrderRepository;
 import com.nimbleways.springboilerplate.repositories.ProductRepository;
 import com.nimbleways.springboilerplate.services.implementations.ProductService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +35,9 @@ public class MyController {
     @ResponseStatus(HttpStatus.OK)
     public ProcessOrderResponse processOrder(@PathVariable Long orderId) {
         Order order = or.findById(orderId).get();
-        System.out.println(order);
-        List<Long> ids = new ArrayList<>();
-        ids.add(orderId);
         Set<Product> products = order.getItems();
         for (Product p : products) {
-            if (p.getType().equals("NORMAL")) {
+            if (p.getType() == ProductType.NORMAL) {
                 if (p.getAvailable() > 0) {
                     p.setAvailable(p.getAvailable() - 1);
                     pr.save(p);
@@ -51,16 +47,15 @@ public class MyController {
                         ps.notifyDelay(leadTime, p);
                     }
                 }
-            } else if (p.getType().equals("SEASONAL")) {
-                // Add new season rules
-                if ((LocalDate.now().isAfter(p.getSeasonStartDate()) && LocalDate.now().isBefore(p.getSeasonEndDate())
-                        && p.getAvailable() > 0)) {
+            } else if (p.getType() == ProductType.SEASONAL) {
+                if (LocalDate.now().isAfter(p.getSeasonStartDate()) && LocalDate.now().isBefore(p.getSeasonEndDate())
+                        && p.getAvailable() > 0) {
                     p.setAvailable(p.getAvailable() - 1);
                     pr.save(p);
                 } else {
                     ps.handleSeasonalProduct(p);
                 }
-            } else if (p.getType().equals("EXPIRABLE")) {
+            } else if (p.getType() == ProductType.EXPIRABLE) {
                 if (p.getAvailable() > 0 && p.getExpiryDate().isAfter(LocalDate.now())) {
                     p.setAvailable(p.getAvailable() - 1);
                     pr.save(p);

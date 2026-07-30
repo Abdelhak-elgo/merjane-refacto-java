@@ -1,6 +1,7 @@
 package com.nimbleways.springboilerplate.services.implementations;
 
 import com.nimbleways.springboilerplate.entities.Product;
+import com.nimbleways.springboilerplate.entities.ProductType;
 import com.nimbleways.springboilerplate.repositories.ProductRepository;
 import com.nimbleways.springboilerplate.utils.Annotations.UnitTest;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ class ExpirableProductServiceTest {
     void givenExpiredProduct() {
         // GIVEN — product has stock but is expired
         LocalDate expiryDate = LocalDate.now().minusDays(2);
-        Product product = new Product(null, 10, 6, "EXPIRABLE", "Milk", expiryDate, null, null);
+        Product product = new Product(null, 10, 6, ProductType.EXPIRABLE, "Milk", expiryDate, null, null);
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
@@ -45,7 +46,7 @@ class ExpirableProductServiceTest {
     void givenOutOfStockNotExpired() {
         // GIVEN — product is not expired but has no stock left
         LocalDate expiryDate = LocalDate.now().plusDays(5);
-        Product product = new Product(null, 10, 0, "EXPIRABLE", "Butter", expiryDate, null, null);
+        Product product = new Product(null, 10, 0, ProductType.EXPIRABLE, "Butter", expiryDate, null, null);
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
