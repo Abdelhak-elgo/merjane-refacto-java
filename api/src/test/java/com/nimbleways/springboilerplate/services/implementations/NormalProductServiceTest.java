@@ -22,7 +22,7 @@ class NormalProductServiceTest {
     @Mock
     private NotificationService notificationService;
     @InjectMocks
-    private ProductService productService;
+    private NormalProductProcessor normalProductProcessor;
 
     @Test
     void givenNormalProductOutOfStockn() {
@@ -31,7 +31,7 @@ class NormalProductServiceTest {
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
-        productService.notifyDelay(product.getLeadTime(), product);
+        normalProductProcessor.process(product);
 
         // THEN
         assertEquals(0, product.getAvailable());

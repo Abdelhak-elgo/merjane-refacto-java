@@ -24,7 +24,7 @@ class ExpirableProductServiceTest {
     @Mock
     private NotificationService notificationService;
     @InjectMocks
-    private ProductService productService;
+    private ExpirableProductProcessor expirableProductProcessor;
 
     @Test
     void givenExpiredProduct() {
@@ -34,7 +34,7 @@ class ExpirableProductServiceTest {
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
-        productService.handleExpiredProduct(product);
+        expirableProductProcessor.process(product);
 
         // THEN
         verify(notificationService, times(1)).sendExpirationNotification("Milk", expiryDate);
@@ -50,7 +50,7 @@ class ExpirableProductServiceTest {
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
-        productService.handleExpiredProduct(product);
+        expirableProductProcessor.process(product);
 
         // THEN
         verify(notificationService, times(1)).sendExpirationNotification("Butter", expiryDate);

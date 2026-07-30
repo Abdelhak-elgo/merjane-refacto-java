@@ -1,8 +1,9 @@
 package com.nimbleways.springboilerplate.services.implementations;
 
 // Tests split into dedicated files:
-// - NormalProductServiceTest.java
-// - SeasonalProductServiceTest.java
-// - ExpirableProductServiceTest.java
+// - NormalProductServiceTest.java (NormalProductProcessor)
+// - SeasonalProductServiceTest.java (SeasonalProductProcessor)
+// - ExpirableProductServiceTest.java (ExpirableProductProcessor)
+// - ProductServiceTest.java (dispatch to the correct processor)
 class MyUnitTests {
 }

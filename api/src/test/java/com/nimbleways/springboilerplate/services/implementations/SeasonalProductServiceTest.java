@@ -24,7 +24,7 @@ class SeasonalProductServiceTest {
     @Mock
     private NotificationService notificationService;
     @InjectMocks
-    private ProductService productService;
+    private SeasonalProductProcessor seasonalProductProcessor;
 
     @Test
     void givenInSeasonOutOfStockLeadTimeWithinSeason() {
@@ -34,7 +34,7 @@ class SeasonalProductServiceTest {
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
-        productService.handleSeasonalProduct(product);
+        seasonalProductProcessor.process(product);
 
         // THEN
         verify(notificationService, times(1)).sendDelayNotification(5, "Watermelon");
@@ -49,7 +49,7 @@ class SeasonalProductServiceTest {
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
-        productService.handleSeasonalProduct(product);
+        seasonalProductProcessor.process(product);
 
         // THEN
         verify(notificationService, times(1)).sendOutOfStockNotification("Watermelon");
@@ -65,7 +65,7 @@ class SeasonalProductServiceTest {
         when(productRepository.save(product)).thenReturn(product);
 
         // WHEN
-        productService.handleSeasonalProduct(product);
+        seasonalProductProcessor.process(product);
 
         // THEN — stock is not zeroed when product is simply not yet in season
         verify(notificationService, times(1)).sendOutOfStockNotification("Grapes");
